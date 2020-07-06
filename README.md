@@ -1,12 +1,17 @@
-Trabajo-final-de-grado
+# Trabajo final de grado 
 
+## Sistema de planificación, seguimiento y análisis de pedidos a comercios
 
- - [x] Menu principal
- - [x] Vizualizacion de comercios
- - [x] Vizualizacion de productos
+#### A continuación se presentan las funcionalidades desarrolladas en el sistema.
+
+ - [x] Menú principal
+ - [x] Visualización de comercios
+ - [x] Visualización de productos
  - [ ] Realizar un pedido
  - [ ] Detalles de un pedido
  - [ ] Alta de un comercio
  - [ ] Registro de usuario
- - [ ] Inicio de sesion
- - [ ] Estadisticas de mi comercio
+ - [ ] Inicio de sesión
+ - [ ] Estadísticas de comercio
+ - [ ] Visualizar estados de pedidos
+
