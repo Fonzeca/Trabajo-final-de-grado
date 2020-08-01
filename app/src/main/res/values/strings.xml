@@ -6,8 +6,8 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome!"</string>
-    <string name="invalid_username">Usuario incorrecto</string>
-    <string name="invalid_password">Debe ser mayor a menor a 8 caracteres</string>
+    <string name="invalid_username">Debe ser menor a 15 caracteres</string>
+    <string name="invalid_password">Debe ser menor a 8 caracteres</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_home">Home</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

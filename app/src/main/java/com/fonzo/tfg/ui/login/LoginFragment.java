@@ -4,64 +4,78 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fonzo.tfg.Home;
 import com.fonzo.tfg.R;
+import com.fonzo.tfg.data.LoginRepository;
+import com.fonzo.tfg.data.model.UsuarioView;
+import com.fonzo.tfg.rest.ServidorTesis;
+import com.fonzo.tfg.rest.TesisRetrofit;
+import com.fonzo.tfg.ui.TesisViewModelFactory;
+import com.fonzo.tfg.ui.login.viewmodel.LoginEstadoCampos;
+import com.fonzo.tfg.ui.login.viewmodel.LoginResult;
+import com.fonzo.tfg.ui.login.viewmodel.LoginViewModel;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private ProgressBar loadingProgressBar;
 
-    @Nullable
-    @Override
+    /**
+     * Se crea la vista
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return vista ya construida
+     */
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loginViewModel = new ViewModelProvider(requireActivity(), new LoginViewModelFactory()).get(LoginViewModel.class);
+        loginViewModel = new ViewModelProvider(requireActivity(), new TesisViewModelFactory(getContext())).get(LoginViewModel.class);
 
-        final EditText usernameEditText = view.findViewById(R.id.username);
-        final EditText passwordEditText = view.findViewById(R.id.password);
-        final Button loginButton = view.findViewById(R.id.login);
-        final ProgressBar loadingProgressBar = view.findViewById(R.id.loading);
+        usernameEditText = view.findViewById(R.id.username);
+        passwordEditText = view.findViewById(R.id.password);
+        loginButton = view.findViewById(R.id.login);
+        loadingProgressBar = view.findViewById(R.id.loading);
 
 
-        Intent intent = new Intent(getActivity(), Home.class);
-        startActivity(intent);
-        getActivity().finish();
-
-        loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
+        loginViewModel.getLoginEstadoCampos().observe(getViewLifecycleOwner(), new Observer<LoginEstadoCampos>() {
             @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
+            public void onChanged(@Nullable LoginEstadoCampos loginEstadoCampos) {
+                if (loginEstadoCampos == null) {
                     return;
                 }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
+                loginButton.setEnabled(loginEstadoCampos.isValido());
+                if (loginEstadoCampos.getUsuarioError() != null) {
+                    usernameEditText.setError(getString(loginEstadoCampos.getUsuarioError()));
                 }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
+                if (loginEstadoCampos.getClaveError() != null) {
+                    passwordEditText.setError(getString(loginEstadoCampos.getClaveError()));
                 }
             }
         });
@@ -77,7 +91,7 @@ public class LoginFragment extends Fragment {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
+                    loginSucces(loginResult.getSuccess());
                 }
             }
         });
@@ -87,8 +101,6 @@ public class LoginFragment extends Fragment {
             }
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
-
-            @Override
             public void afterTextChanged(Editable s) {
                 loginViewModel.loginDataChanged(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
@@ -96,44 +108,29 @@ public class LoginFragment extends Fragment {
 
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),  passwordEditText.getText().toString());
-                }
-                return false;
-            }
-        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
         });
+
+        loadingProgressBar.setVisibility(View.VISIBLE);
+        loginViewModel.verificarToken();
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-
+    private void loginSucces(UsuarioView model) {
         Intent intent = new Intent(getActivity(), Home.class);
         startActivity(intent);
-
-
-        if (getContext() != null && getContext().getApplicationContext() != null) {
-            Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        }
+        getActivity().finish();
     }
 
-    private void showLoginFailed(@StringRes Integer errorString) {
+    private void showLoginFailed(Exception exception) {
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(
                     getContext().getApplicationContext(),
-                    errorString,
+                    exception.getMessage(),
                     Toast.LENGTH_LONG).show();
         }
     }

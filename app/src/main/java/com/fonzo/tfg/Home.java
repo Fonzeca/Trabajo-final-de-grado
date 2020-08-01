@@ -19,30 +19,38 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private DrawerLayout drawer;
     private NavigationView navigationView;
 
+    /**
+     * Se crea la visa, el toolbar, el navigation view y el toggle button
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
-
-        drawer = findViewById(R.id.drawer_layout);
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        drawer = findViewById(R.id.drawer_layout);
+
+        // Se crea el boton toogle, para abrir el navigation view
         ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.abrir_toogle, R.string.cerrar_toogle);
         drawer.addDrawerListener(toogle);
         toogle.syncState();
 
+        // Si la pantalla se incia por primera vez, se inicia el fragment
         if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.home_host_fragment, ListaComerciosFragment.newInstance(1)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_host_fragment, new ListaComerciosFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_comprar);
         }
 
     }
 
+    /**
+     * Para que se cierre el navigation view, al presionar atras
+     */
     @Override
     public void onBackPressed() {
         if(drawer.isDrawerOpen(GravityCompat.START)){
@@ -52,11 +60,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    /**
+     * Se configura el navigation view, para cambiar cada fragmento
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.nav_comprar:
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_host_fragment, ListaComerciosFragment.newInstance(1)).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_host_fragment, new ListaComerciosFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_comprar);
                 break;
             case R.id.nav_mi_comercio:
@@ -73,7 +84,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Agrega items al menu de la izquierda.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }

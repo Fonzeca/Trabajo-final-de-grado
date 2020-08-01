@@ -1,54 +1,77 @@
 package com.fonzo.tfg.data;
 
-import com.fonzo.tfg.data.model.LoggedInUser;
+import android.content.Context;
+import android.content.SharedPreferences;
 
-/**
- * Class that requests authentication and user information from the remote data source and
- * maintains an in-memory cache of login status and user credentials information.
- */
+import com.fonzo.tfg.data.model.UsuarioView;
+import com.fonzo.tfg.rest.ServidorTesis;
+import com.fonzo.tfg.rest.TesisRetrofit;
+import com.fonzo.tfg.rest.pojo.LoginRq;
+import com.fonzo.tfg.rest.pojo.LoginRs;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Response;
+
 public class LoginRepository {
-
     private static volatile LoginRepository instance;
 
-    private LoginDataSource dataSource;
+    private UsuarioView user = null;
+    private Context context;
 
-    // If user credentials will be cached in local storage, it is recommended it be encrypted
-    // @see https://developer.android.com/training/articles/keystore
-    private LoggedInUser user = null;
-
-    // private constructor : singleton access
-    private LoginRepository(LoginDataSource dataSource) {
-        this.dataSource = dataSource;
+    // Contructor privado para el singleton
+    private LoginRepository(Context context) {
+        this.context = context;
     }
 
-    public static LoginRepository getInstance(LoginDataSource dataSource) {
+    public static LoginRepository getInstance(Context context) {
         if (instance == null) {
-            instance = new LoginRepository(dataSource);
+            instance = new LoginRepository(context);
         }
         return instance;
     }
 
-    public boolean isLoggedIn() {
-        return user != null;
+    public String obtenerToken() {
+        SharedPreferences preferences = context.getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        String token = preferences.getString("token", null);
+        return token;
     }
 
     public void logout() {
+        SharedPreferences preferences = context.getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        preferences.edit().putString("token", null).apply();
         user = null;
-        dataSource.logout();
     }
 
-    private void setLoggedInUser(LoggedInUser user) {
-        this.user = user;
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
-    }
+    /**
+     * Loguea el usuario y guarda su token en Shared.
+     * @param username
+     * @param password
+     * @return Un Result Success o Error, si es Success tiene un UsuarioView
+     */
+    public Result<UsuarioView> login(String username, String password) {
+        try {
+            ServidorTesis servidor = TesisRetrofit.obtenerConexion();
+            Call<LoginRs> loginCall = servidor.login(new LoginRq(username, password));
 
-    public Result<LoggedInUser> login(String username, String password) {
-        // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+            Response<LoginRs> response = loginCall.execute();
+
+            if(response.isSuccessful()){
+                LoginRs bodyResponse = response.body();
+                user = new UsuarioView(bodyResponse.usuario);
+
+                //Guarda token
+                {
+                    SharedPreferences preferences = context.getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+                    preferences.edit().putString("token", bodyResponse.token).apply();
+                }
+            }else{
+                return new Result.Error(new IOException("Usuario y/o clave incorrectas."));
+            }
+        } catch (Exception e) {
+            return new Result.Error(new IOException("Error logging in", e));
         }
-        return result;
+        return new Result.Success<UsuarioView>(user);
     }
 }
