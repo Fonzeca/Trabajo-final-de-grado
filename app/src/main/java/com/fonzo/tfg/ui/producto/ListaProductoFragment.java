@@ -3,7 +3,11 @@ package com.fonzo.tfg.ui.producto;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,47 +15,55 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.fonzo.tfg.R;
-import com.fonzo.tfg.ui.producto.dummy.ContenidoDummyProducto;
+import com.fonzo.tfg.data.model.ComercioView;
+import com.fonzo.tfg.data.model.ProductoView;
+import com.fonzo.tfg.ui.TesisViewModelFactory;
+import com.fonzo.tfg.ui.producto.viewmodel.ProductosViewModel;
+
+import java.util.List;
+import java.util.Objects;
 
 public class ListaProductoFragment extends Fragment {
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
+    private ProductosViewModel productosViewModel;
+    private ComercioView comercioView;
 
-    public ListaProductoFragment() {
-    }
+    private TextView textToolbar;
 
-    public static ListaProductoFragment newInstance(int columnCount) {
-        ListaProductoFragment fragment = new ListaProductoFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+    public ListaProductoFragment(ComercioView comercioView) {
+        this.comercioView = comercioView;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_productos_list, container, false);
+        return inflater.inflate(R.layout.fragment_productos_list, container, false);
+    }
 
-        Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.lista_productos_recycler_view);
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        productosViewModel = new ViewModelProvider(requireActivity(), new TesisViewModelFactory(getContext())).get(ProductosViewModel.class);
+
+        textToolbar = view.findViewById(R.id.producto_text_toolbar);
+        if(comercioView!=null){
+            textToolbar.setText(Objects.requireNonNull(comercioView).nombre);
         }
-        recyclerView.setAdapter(new ProductoRecyclerViewAdapter(ContenidoDummyProducto.ITEMS));
-        return view;
+
+        RecyclerView recyclerView = view.findViewById(R.id.lista_productos_recycler_view);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(new ProductoRecyclerViewAdapter(null));
+
+        productosViewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<List<ProductoView>>() {
+            public void onChanged(List<ProductoView> productoViews) {
+                recyclerView.setAdapter(new ProductoRecyclerViewAdapter(productoViews));
+            }
+        });
+
+        productosViewModel.initProductos(1);
+
     }
 }

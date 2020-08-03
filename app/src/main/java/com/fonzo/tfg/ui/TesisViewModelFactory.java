@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.fonzo.tfg.data.LoginRepository;
 import com.fonzo.tfg.ui.comercios.viewmodel.ComerciosViewModel;
 import com.fonzo.tfg.ui.login.viewmodel.LoginViewModel;
+import com.fonzo.tfg.ui.producto.viewmodel.ProductosViewModel;
 
 public class TesisViewModelFactory implements ViewModelProvider.Factory {
     private Context context;
@@ -25,6 +26,8 @@ public class TesisViewModelFactory implements ViewModelProvider.Factory {
             return (T) new LoginViewModel(LoginRepository.getInstance(context));
         }else if (modelClass.isAssignableFrom(ComerciosViewModel.class)) {
             return (T) new ComerciosViewModel(context);
+        }else if (modelClass.isAssignableFrom(ProductosViewModel.class)){
+            return (T) new ProductosViewModel(context);
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

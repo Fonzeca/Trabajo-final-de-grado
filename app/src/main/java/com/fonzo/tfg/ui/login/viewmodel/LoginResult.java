@@ -1,29 +1,29 @@
-package com.fonzo.tfg.ui.login;
+package com.fonzo.tfg.ui.login.viewmodel;
 
 import androidx.annotation.Nullable;
-import com.fonzo.tfg.data.model.LoggedInUser;
+import com.fonzo.tfg.data.model.UsuarioView;
 
 public class LoginResult {
     @Nullable
-    private LoggedInUser success;
+    private UsuarioView success;
     @Nullable
     private Exception error;
 
-    LoginResult(@Nullable Exception error) {
+    public LoginResult(@Nullable Exception error) {
         this.error = error;
     }
 
-    LoginResult(@Nullable LoggedInUser success) {
+    public LoginResult(@Nullable UsuarioView success) {
         this.success = success;
     }
 
     @Nullable
-    LoggedInUser getSuccess() {
+    public UsuarioView getSuccess() {
         return success;
     }
 
     @Nullable
-    Exception getError() {
+    public Exception getError() {
         return error;
     }
 }

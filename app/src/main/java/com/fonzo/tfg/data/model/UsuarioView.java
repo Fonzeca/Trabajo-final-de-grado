@@ -1,11 +1,14 @@
 package com.fonzo.tfg.data.model;
 
-public class LoggedInUser {
-    public String usuario;
-    public String token;
+import com.fonzo.tfg.rest.pojo.LoginRs;
 
-    public LoggedInUser(String usuario, String token) {
+public class UsuarioView {
+    public String usuario;
+
+    public UsuarioView(String usuario) {
         this.usuario = usuario;
-        this.token = token;
+    }
+    public UsuarioView(LoginRs loginRs){
+        this.usuario = loginRs.usuario;
     }
 }

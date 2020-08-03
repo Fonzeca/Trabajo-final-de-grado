@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.fonzo.tfg.R;
+import com.fonzo.tfg.data.model.ComercioView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ComercioActivity extends AppCompatActivity {
+    private ComercioView comercioView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comercio);
+
+        comercioView = (ComercioView) getIntent().getSerializableExtra("comercio");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -32,7 +36,7 @@ public class ComercioActivity extends AppCompatActivity {
             }
         });
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.comercio_fragment_host, ListaProductoFragment.newInstance(1)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.comercio_fragment_host, new ListaProductoFragment(comercioView)).commit();
     }
 
     @Override

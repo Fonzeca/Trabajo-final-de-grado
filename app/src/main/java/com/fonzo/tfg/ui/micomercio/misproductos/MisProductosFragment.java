@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fonzo.tfg.R;
-import com.fonzo.tfg.ui.producto.dummy.ContenidoDummyProducto;
 
 public class MisProductosFragment extends Fragment {
 
@@ -51,7 +50,7 @@ public class MisProductosFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new ProductoRecyclerViewAdapter(ContenidoDummyProducto.ITEMS));
+        recyclerView.setAdapter(new ProductoRecyclerViewAdapter(null));
         return view;
     }
 }

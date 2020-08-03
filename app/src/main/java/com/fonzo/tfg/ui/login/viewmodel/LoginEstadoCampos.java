@@ -1,11 +1,11 @@
-package com.fonzo.tfg.ui.login;
+package com.fonzo.tfg.ui.login.viewmodel;
 
 import androidx.annotation.Nullable;
 
 /**
  * Clase que contiene el estado del formulario del login
  */
-class LoginEstadoCampos {
+public class LoginEstadoCampos {
     @Nullable
     private Integer usuarioError;
     @Nullable
@@ -24,16 +24,16 @@ class LoginEstadoCampos {
     }
 
     @Nullable
-    Integer getUsuarioError() {
+    public Integer getUsuarioError() {
         return usuarioError;
     }
 
     @Nullable
-    Integer getClaveError() {
+    public Integer getClaveError() {
         return claveError;
     }
 
-    boolean isValido() {
+    public boolean isValido() {
         return isValido;
     }
 }

@@ -8,15 +8,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import com.fonzo.tfg.R;
-import com.fonzo.tfg.ui.producto.dummy.ContenidoDummyProducto;
+import com.fonzo.tfg.data.model.ProductoView;
 
 public class ProductoRecyclerViewAdapter extends RecyclerView.Adapter<ProductoRecyclerViewAdapter.ViewHolder> {
 
-    private final List<ContenidoDummyProducto.DummyProducto> mValues;
+    private final List<ProductoView> mValues;
 
-    public ProductoRecyclerViewAdapter(List<ContenidoDummyProducto.DummyProducto> items) {
+    public ProductoRecyclerViewAdapter(List<ProductoView> items) {
+        if(items == null){
+            items = new ArrayList<>();
+        }
         mValues = items;
     }
 
@@ -39,7 +43,7 @@ public class ProductoRecyclerViewAdapter extends RecyclerView.Adapter<ProductoRe
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView nombre;
         public final TextView precio;
-        public ContenidoDummyProducto.DummyProducto mItem;
+        public ProductoView mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -47,9 +51,9 @@ public class ProductoRecyclerViewAdapter extends RecyclerView.Adapter<ProductoRe
             precio = (TextView) view.findViewById(R.id.mis_productos_item_list_precio_producto);
         }
 
-        public void asignarDatos(ContenidoDummyProducto.DummyProducto item){
+        public void asignarDatos(ProductoView item){
             nombre.setText(item.nombre);
-            precio.setText(item.precio);
+            precio.setText(""+item.precio);
         }
 
     }
