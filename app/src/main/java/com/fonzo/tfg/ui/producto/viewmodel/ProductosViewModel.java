@@ -36,7 +36,7 @@ public class ProductosViewModel extends ViewModel {
         String token = loginRepository.obtenerToken();
 
         if(token != null && !token.isEmpty()){
-            Call<ListaProductoRs> loginCall = servidor.obtenerProductos("KjIgM_7yg4eaE_Vbm_4cpw==",1);
+            Call<ListaProductoRs> loginCall = servidor.obtenerProductos(token,comercioId);
             loginCall.enqueue(new Callback<ListaProductoRs>() {
                 public void onResponse(Call<ListaProductoRs> call, Response<ListaProductoRs> response) {
                     List<ProductoView> listaViews = new ArrayList<>();
