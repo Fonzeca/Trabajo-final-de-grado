@@ -11,7 +11,10 @@
  - [ ] Detalles de un pedido
  - [ ] Alta de un comercio
  - [ ] Registro de usuario
- - [ ] Inicio de sesión
+ - [x] Inicio de sesión
  - [ ] Estadísticas de comercio
  - [ ] Visualizar estados de pedidos
 
+Usuarios de prueba:
+- Nombre de usuario: prueba1
+- Clave: 123456
