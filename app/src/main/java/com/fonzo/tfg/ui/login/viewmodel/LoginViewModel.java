@@ -114,7 +114,7 @@ public class LoginViewModel extends ViewModel {
 
     // Logica de clave
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() <= 9;
+        return password != null && password.trim().length() <= 8;
     }
 
     public LiveData<LoginEstadoCampos> getLoginEstadoCampos() {
