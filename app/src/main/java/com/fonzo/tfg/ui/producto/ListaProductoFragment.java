@@ -63,7 +63,7 @@ public class ListaProductoFragment extends Fragment {
             }
         });
 
-        productosViewModel.initProductos(1);
+        productosViewModel.initProductos(comercioView.id);
 
     }
 }
