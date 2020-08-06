@@ -36,6 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
+    //TODO: Theme app para todo, buscar guias en internet
 
     private LoginViewModel loginViewModel;
     private EditText usernameEditText;
@@ -51,6 +52,7 @@ public class LoginFragment extends Fragment {
      * @return vista ya construida
      */
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //TODO: Registrarse
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
@@ -91,7 +93,7 @@ public class LoginFragment extends Fragment {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    loginSucces(loginResult.getSuccess());
+                    loginSucces();
                 }
             }
         });
@@ -120,7 +122,7 @@ public class LoginFragment extends Fragment {
         loginViewModel.verificarToken();
     }
 
-    private void loginSucces(UsuarioView model) {
+    private void loginSucces() {
         Intent intent = new Intent(getActivity(), Home.class);
         startActivity(intent);
         getActivity().finish();

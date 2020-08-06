@@ -13,7 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.carrito.CarritoActivity"></activity>
+        <activity android:name=".ui.carrito.CarritoActivity"
+            android:label="@string/label_carrito_activity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".ui.producto.ComercioActivity"
             android:label="@string/lable_comercio_activity"

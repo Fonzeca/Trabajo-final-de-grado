@@ -3,23 +3,25 @@ package com.fonzo.tfg.ui.compra;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fonzo.tfg.R;
+import com.fonzo.tfg.data.model.CarritoView;
 import com.fonzo.tfg.data.model.ProductoView;
+import com.fonzo.tfg.ui.carrito.CarritoActivity;
+import com.fonzo.tfg.ui.carrito.CarritoFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 public class DetallesCompra extends Dialog implements View.OnClickListener {
     private ProductoView producto;
@@ -38,20 +40,20 @@ public class DetallesCompra extends Dialog implements View.OnClickListener {
         super(context);
         this.context = context;
         this.producto = producto;
+
         setContentView(R.layout.dialog_compra);
-
-
-
         button = findViewById(R.id.dialog_producto_button_agregar_carrito);
         button.setOnClickListener(this);
-
         textNombre = findViewById(R.id.dialog_producto_titulo);
+        textPrecio = findViewById(R.id.dialog_producto_precio);
+        textEnStock = findViewById(R.id.dialog_producto_en_stock);
+        textTotal = findViewById(R.id.dialog_producto_total);
+        inputCantidad = findViewById(R.id.dialog_producto_cantidad);
+
         textNombre.setText(producto.nombre);
 
-        textPrecio = findViewById(R.id.dialog_producto_precio);
         textPrecio.setText("Precio: $ " + String.format("%.2f", producto.precio));
 
-        textEnStock = findViewById(R.id.dialog_producto_en_stock);
         if(producto.stock <= 0){
             textEnStock.setText("No hay stock");
             //TODO: Color rojo
@@ -60,9 +62,6 @@ public class DetallesCompra extends Dialog implements View.OnClickListener {
             //TODO: Color verde
         }
 
-        textTotal = findViewById(R.id.dialog_producto_total);
-
-        inputCantidad = findViewById(R.id.dialog_producto_cantidad);
         inputCantidad.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -81,17 +80,20 @@ public class DetallesCompra extends Dialog implements View.OnClickListener {
             }
         });
         inputCantidad.setText("1"); //Por defecto 1
+
+
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onClick(View v) {
         if(!inputCantidad.getText().toString().isEmpty()){
-            Toast.makeText(context, "Agregado al carrito exitosamente", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(v.getContext(), CarritoActivity.class);
+            v.getContext().startActivity(intent);
             onBackPressed();
         }else{
             Toast.makeText(context, "Debe insertar una cantidad", Toast.LENGTH_SHORT).show();

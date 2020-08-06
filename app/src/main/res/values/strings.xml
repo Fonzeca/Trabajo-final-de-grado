@@ -21,6 +21,7 @@
     <string name="cerrar_toogle">Cerrar Toogle ACtion</string>
 
     <string name="lable_comercio_activity">Comprar</string>
+    <string name="label_carrito_activity">Carrito</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>

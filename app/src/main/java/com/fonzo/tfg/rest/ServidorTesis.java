@@ -1,5 +1,6 @@
 package com.fonzo.tfg.rest;
 
+import com.fonzo.tfg.rest.pojo.CarritoRs;
 import com.fonzo.tfg.rest.pojo.ListaComerciosRs;
 import com.fonzo.tfg.rest.pojo.ListaProductoRs;
 import com.fonzo.tfg.rest.pojo.LoginRq;
@@ -26,5 +27,8 @@ public interface ServidorTesis {
     @GET("producto")
     Call<ListaProductoRs> obtenerProductos(@Query("token") String token,
                                            @Query("comercioId") int comercioId);
+
+    @GET("carritoActivo")
+    Call<CarritoRs> obtenerCarritoActivo(@Query("token") String token);
 
 }

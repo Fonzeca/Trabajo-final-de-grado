@@ -2,12 +2,9 @@ package com.fonzo.tfg.ui.producto;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.fonzo.tfg.data.model.ProductoView;
@@ -16,6 +13,7 @@ import com.fonzo.tfg.ui.compra.DetallesCompra;
 import java.util.ArrayList;
 import java.util.List;
 import com.fonzo.tfg.R;
+import com.fonzo.tfg.ui.util.ProccessDialog;
 
 public class ProductoRecyclerViewAdapter extends RecyclerView.Adapter<ProductoRecyclerViewAdapter.ViewHolderProducto> {
 
@@ -58,19 +56,34 @@ public class ProductoRecyclerViewAdapter extends RecyclerView.Adapter<ProductoRe
 
             view.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    DetallesCompra detallesCompraDialog = new DetallesCompra(v.getContext(), producto);
+                    /*
+                    ProccessDialog.show(v.getContext(),"","");
 
-                    detallesCompraDialog.setTitle("Detalles");
-                    detallesCompraDialog.show();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(3000);
+                                ProccessDialog.cerrar();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }).start();
+                    */
+
+                    DetallesCompra dialog = new DetallesCompra(view.getContext(), producto);
+                    dialog.setTitle("Detalles");
+                    dialog.show();
                 }
             });
-
         }
 
         public void asignarDatos(ProductoView item){
             producto = item;
             nombre.setText(item.nombre);
-            precio.setText(item.precio + "");
+            precio.setText("$ " + item.precio);
         }
     }
 }

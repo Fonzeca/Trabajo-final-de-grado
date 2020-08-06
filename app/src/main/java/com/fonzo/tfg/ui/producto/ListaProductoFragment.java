@@ -1,6 +1,5 @@
 package com.fonzo.tfg.ui.producto;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +19,7 @@ import com.fonzo.tfg.R;
 import com.fonzo.tfg.data.model.ComercioView;
 import com.fonzo.tfg.data.model.ProductoView;
 import com.fonzo.tfg.ui.TesisViewModelFactory;
+import com.fonzo.tfg.ui.compra.DetallesCompra;
 import com.fonzo.tfg.ui.producto.viewmodel.ProductosViewModel;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class ListaProductoFragment extends Fragment {
         productosViewModel = new ViewModelProvider(requireActivity(), new TesisViewModelFactory(getContext())).get(ProductosViewModel.class);
 
         textToolbar = view.findViewById(R.id.producto_text_toolbar);
-        if(comercioView!=null){
+        if(comercioView != null){
             textToolbar.setText(Objects.requireNonNull(comercioView).nombre);
         }
 
@@ -63,6 +62,7 @@ public class ListaProductoFragment extends Fragment {
             }
         });
 
+        //Busca los productos en servidor
         productosViewModel.initProductos(comercioView.id);
 
     }

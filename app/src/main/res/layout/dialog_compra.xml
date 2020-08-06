@@ -111,6 +111,7 @@
                 android:textSize="12dp"
                 app:icon="@drawable/ic_baseline_shopping_cart_24"
                 app:iconGravity="textStart"
+                android:theme="@style/MyMaterialTheme"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
             <com.google.android.material.button.MaterialButton
@@ -119,6 +120,7 @@
                 android:id="@+id/dialog_producto_button_comprar"
                 android:text="Comprar"
                 android:textSize="12dp"
+                android:theme="@style/MyMaterialTheme"
                 style="@style/Widget.AppCompat.Button.Colored"/>
         </LinearLayout>
 

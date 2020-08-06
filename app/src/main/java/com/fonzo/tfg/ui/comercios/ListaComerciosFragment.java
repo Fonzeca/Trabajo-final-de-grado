@@ -22,6 +22,7 @@ import com.fonzo.tfg.ui.comercios.viewmodel.ComerciosViewModel;
 import java.util.List;
 
 public class ListaComerciosFragment extends Fragment {
+    //TODO: Cambiar nombre a mas entendibles
     private ComerciosViewModel comerciosViewModel;
     private RecyclerView recyclerView;
 
@@ -31,6 +32,7 @@ public class ListaComerciosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_comercios_list, container, false);
+        //TODO: Mejorar el appbar ese
     }
 
     @Override
@@ -52,7 +54,7 @@ public class ListaComerciosFragment extends Fragment {
             }
         });
 
+        //Busca los comercios
         comerciosViewModel.initComercios();
-
     }
 }

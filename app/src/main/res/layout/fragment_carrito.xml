@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:text="Pago en efectivo"
             android:textSize="12dp"
+            android:theme="@style/MyMaterialTheme"
             style="@style/Widget.AppCompat.Button.Colored"/>
 
         <com.google.android.material.button.MaterialButton
@@ -55,6 +56,7 @@
             android:layout_height="wrap_content"
             android:text="Pago online"
             android:textSize="12dp"
+            android:theme="@style/MyMaterialTheme"
             style="@style/Widget.AppCompat.Button.Colored"/>
 
 

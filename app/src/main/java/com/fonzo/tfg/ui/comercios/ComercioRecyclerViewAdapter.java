@@ -26,9 +26,6 @@ public class ComercioRecyclerViewAdapter extends RecyclerView.Adapter<ComercioRe
         mValues = items;
     }
 
-    /**
-     * Setea el OnClick
-     */
     public ViewHolderComercios onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_comercios_item_list, parent, false);
         return new ViewHolderComercios(view);
