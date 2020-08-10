@@ -43,12 +43,12 @@ public class LoginViewModel extends ViewModel {
                     Result.Success<UsuarioView> resultSucces = (Result.Success<UsuarioView>) result;
 
                     //Se crea el LoginResult para la vista
-                    resultLogin = new LoginResult(resultSucces.getData());
+                    resultLogin = new LoginResult(true, "Login exitoso");
                 } else {
                     Result.Error resultError = (Result.Error) result;
 
                     //Se crea el LoginResult para la vista
-                    resultLogin = new LoginResult(resultError.getError());
+                    resultLogin = new LoginResult(false, resultError.getError().getMessage());
                 }
 
                 //Se setea el valor del LoginResult
@@ -60,7 +60,6 @@ public class LoginViewModel extends ViewModel {
     public void verificarToken(){
         String token = loginRepository.obtenerToken();
 
-        //TODO: Arreglar, mucho codigo y datos en duro
         if(token != null && !token.isEmpty()){
             ServidorTesis servidor = TesisRetrofit.obtenerConexion();
             Call<Boolean> call = servidor.validarToken(token);
@@ -69,21 +68,24 @@ public class LoginViewModel extends ViewModel {
                     if(response.isSuccessful()){
                         if(!response.body()){
                             loginRepository.logout();
-                            loginResult.postValue(new LoginResult(new Exception()));
+
+                            loginResult.postValue(new LoginResult(false, "Login no exitoso."));
                         }else{
-                            loginResult.postValue(new LoginResult(new UsuarioView("Mejorar")));
+                            loginResult.postValue(new LoginResult(true, "Login exitoso."));
                         }
                     }else {
-                        loginResult.postValue(new LoginResult(new Exception()));
+                        loginResult.postValue(new LoginResult(false, "Login fallido."));
                     }
 
                 }
                 public void onFailure(Call<Boolean> call, Throwable t) {
-                    loginResult.postValue(new LoginResult(new Exception("Error de conexion.")));
+                    loginResult.postValue(new LoginResult(false, "Error de conexion."));
                 }
             });
         }
 
+        //No token
+        loginResult.postValue(new LoginResult(false, ""));
     }
 
     /**

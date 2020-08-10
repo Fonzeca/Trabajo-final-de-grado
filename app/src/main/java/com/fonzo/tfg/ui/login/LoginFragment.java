@@ -6,9 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,18 +20,10 @@ import android.widget.Toast;
 
 import com.fonzo.tfg.Home;
 import com.fonzo.tfg.R;
-import com.fonzo.tfg.data.LoginRepository;
-import com.fonzo.tfg.data.model.UsuarioView;
-import com.fonzo.tfg.rest.ServidorTesis;
-import com.fonzo.tfg.rest.TesisRetrofit;
 import com.fonzo.tfg.ui.TesisViewModelFactory;
 import com.fonzo.tfg.ui.login.viewmodel.LoginEstadoCampos;
 import com.fonzo.tfg.ui.login.viewmodel.LoginResult;
 import com.fonzo.tfg.ui.login.viewmodel.LoginViewModel;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
     //TODO: Theme app para todo, buscar guias en internet
@@ -89,11 +79,10 @@ public class LoginFragment extends Fragment {
                     return;
                 }
                 loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
+                if (loginResult.isSuccess()) {
                     loginSucces();
+                }else {
+                    showLoginFailed(loginResult.getMensaje());
                 }
             }
         });
@@ -128,11 +117,11 @@ public class LoginFragment extends Fragment {
         getActivity().finish();
     }
 
-    private void showLoginFailed(Exception exception) {
+    private void showLoginFailed(String error) {
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(
                     getContext().getApplicationContext(),
-                    exception.getMessage(),
+                    error,
                     Toast.LENGTH_LONG).show();
         }
     }

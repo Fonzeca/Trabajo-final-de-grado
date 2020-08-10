@@ -1,9 +1,11 @@
 package com.fonzo.tfg;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
 
+import com.fonzo.tfg.data.LoginRepository;
 import com.fonzo.tfg.ui.comercios.ListaComerciosFragment;
 import com.fonzo.tfg.ui.micomercio.MiComercioFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -27,7 +29,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         //TODO: El icono de la aplicacion
-        //TODO: Agregar Logout
 
         Toolbar toolbar = findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
@@ -79,6 +80,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_estadisticas:
 
                 break;
+            case R.id.nav_mi_lista:
+
+                break;
+            case R.id.nav_logout:
+                logout();
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return false;
@@ -89,5 +96,15 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         // Agrega items al menu de la izquierda.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
+    }
+
+    /**
+     * Cierra sesion, y abre la activity de Login
+     */
+    private void logout(){
+        LoginRepository.getInstance(this).logout();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

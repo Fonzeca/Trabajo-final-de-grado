@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -56,10 +57,10 @@ public class DetallesCompra extends Dialog implements View.OnClickListener {
 
         if(producto.stock <= 0){
             textEnStock.setText("No hay stock");
-            //TODO: Color rojo
+            textEnStock.setTextColor(Color.RED);
         }else{
             textEnStock.setText("En hay stock");
-            //TODO: Color verde
+            textEnStock.setTextColor(Color.GREEN);
         }
 
         inputCantidad.addTextChangedListener(new TextWatcher() {

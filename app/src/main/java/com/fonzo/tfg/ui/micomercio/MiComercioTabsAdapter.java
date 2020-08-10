@@ -18,7 +18,7 @@ public class MiComercioTabsAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 0:
-                return MisProductosFragment.newInstance(1);
+                return new MisProductosFragment();
             default:
                 return PedidosFragment.newInstance(1);
         }

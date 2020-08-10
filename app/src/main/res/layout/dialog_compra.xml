@@ -20,14 +20,16 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="100dp"
                     android:id="@+id/dialog_producto_imagen"
-                    android:src="@drawable/common_google_signin_btn_text_dark_normal"
+                    android:src="@drawable/ic_baseline_image_24"
                     />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="Coca cola"
@@ -106,6 +108,15 @@
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/dialog_producto_button_comprar"
+                android:text="Comprar"
+                android:textSize="12dp"
+                android:theme="@style/MyMaterialTheme"
+                style="@style/Widget.AppCompat.Button.Colored"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/dialog_producto_button_agregar_carrito"
                 android:text="Agregar al carrito"
                 android:textSize="12dp"
@@ -113,15 +124,6 @@
                 app:iconGravity="textStart"
                 android:theme="@style/MyMaterialTheme"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/dialog_producto_button_comprar"
-                android:text="Comprar"
-                android:textSize="12dp"
-                android:theme="@style/MyMaterialTheme"
-                style="@style/Widget.AppCompat.Button.Colored"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -5,6 +5,7 @@ import com.fonzo.tfg.rest.pojo.ListaComerciosRs;
 import com.fonzo.tfg.rest.pojo.ListaProductoRs;
 import com.fonzo.tfg.rest.pojo.LoginRq;
 import com.fonzo.tfg.rest.pojo.LoginRs;
+import com.fonzo.tfg.rest.pojo.UsuarioRs;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -30,5 +31,8 @@ public interface ServidorTesis {
 
     @GET("carritoActivo")
     Call<CarritoRs> obtenerCarritoActivo(@Query("token") String token);
+
+    @GET("usuario")
+    Call<UsuarioRs> obtenerUsuarioLogeado(@Query("token") String token);
 
 }

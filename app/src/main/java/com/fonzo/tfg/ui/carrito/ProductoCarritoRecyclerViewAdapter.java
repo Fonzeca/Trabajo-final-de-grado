@@ -3,6 +3,8 @@ package com.fonzo.tfg.ui.carrito;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +50,7 @@ public class ProductoCarritoRecyclerViewAdapter extends RecyclerView.Adapter<Pro
 		public final TextView nombre;
 		public final TextView precio;
 		public final TextView cantidad;
+		public final ImageView btnBorrar;
 
 
 		public ViewHolderProductoCarrito(View view) {
@@ -56,6 +59,8 @@ public class ProductoCarritoRecyclerViewAdapter extends RecyclerView.Adapter<Pro
 			precio = (TextView) view.findViewById(R.id.text_prodcuto_precio);
 			cantidad = (TextView) view.findViewById(R.id.text_cantidad_producto);
 			cantidad.setVisibility(View.VISIBLE);
+			btnBorrar = (ImageView) view.findViewById(R.id.button_producto_delete);
+			btnBorrar.setVisibility(View.VISIBLE);
 
 			view.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {

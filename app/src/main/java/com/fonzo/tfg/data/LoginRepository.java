@@ -59,7 +59,7 @@ public class LoginRepository {
 
             if(response.isSuccessful()){
                 LoginRs bodyResponse = response.body();
-                user = new UsuarioView(bodyResponse.usuario);
+                user = new UsuarioView(bodyResponse);
 
                 //Guarda token
                 {
@@ -73,5 +73,9 @@ public class LoginRepository {
             return new Result.Error(new IOException("Error logging in", e));
         }
         return new Result.Success<UsuarioView>(user);
+    }
+
+    public UsuarioView getUser() {
+        return user;
     }
 }

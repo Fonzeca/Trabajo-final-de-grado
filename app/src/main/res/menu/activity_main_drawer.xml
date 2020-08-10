@@ -17,5 +17,16 @@
             android:icon="@drawable/ic_baseline_bar_chart_24"
             android:title="Estadisticas"
             android:enabled="false"/>
+        <item
+            android:id="@+id/nav_mi_lista"
+            android:icon="@drawable/ic_baseline_list_alt_24"
+            android:title="Mi lista"
+            android:enabled="false"/>
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"
+            android:title="Cerrar sesion"/>
     </group>
 </menu>

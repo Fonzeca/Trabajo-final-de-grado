@@ -47,6 +47,26 @@
                 android:visibility="gone"/>
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/button_producto_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:clickable="true"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/button_producto_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            android:clickable="true"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

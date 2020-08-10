@@ -5,25 +5,21 @@ import com.fonzo.tfg.data.model.UsuarioView;
 
 public class LoginResult {
     @Nullable
-    private UsuarioView success;
+    private boolean success;
     @Nullable
-    private Exception error;
+    private String mensaje;
 
-    public LoginResult(@Nullable Exception error) {
-        this.error = error;
-    }
-
-    public LoginResult(@Nullable UsuarioView success) {
+    public LoginResult(boolean success, String mensaje) {
+        this.mensaje = mensaje;
         this.success = success;
     }
 
-    @Nullable
-    public UsuarioView getSuccess() {
+    public boolean isSuccess() {
         return success;
     }
 
     @Nullable
-    public Exception getError() {
-        return error;
+    public String getMensaje() {
+        return mensaje;
     }
 }
