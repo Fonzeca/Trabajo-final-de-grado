@@ -2,6 +2,8 @@
 
 ## Sistema de planificación, seguimiento y análisis de pedidos a comercios
 
+Para descargar el apk haga click [aqui](demo-trabajo-final.apk).
+
 #### A continuación se presentan las funcionalidades desarrolladas en el sistema.
 
  - [x] Menú principal
