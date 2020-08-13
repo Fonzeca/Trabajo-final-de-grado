@@ -3,15 +3,20 @@ package com.fonzo.tfg.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.fonzo.tfg.data.model.UsuarioView;
 import com.fonzo.tfg.rest.ServidorTesis;
 import com.fonzo.tfg.rest.TesisRetrofit;
 import com.fonzo.tfg.rest.pojo.LoginRq;
 import com.fonzo.tfg.rest.pojo.LoginRs;
+import com.fonzo.tfg.rest.pojo.UsuarioRs;
+import com.fonzo.tfg.ui.login.viewmodel.LoginResult;
 
 import java.io.IOException;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginRepository {
@@ -50,29 +55,57 @@ public class LoginRepository {
      * @param password
      * @return Un Result Success o Error, si es Success tiene un UsuarioView
      */
-    public Result<UsuarioView> login(String username, String password) {
-        try {
-            ServidorTesis servidor = TesisRetrofit.obtenerConexion();
-            Call<LoginRs> loginCall = servidor.login(new LoginRq(username, password));
+    public void login(String username, String password, MutableLiveData<LoginResult> resultMutableLiveData) {
+        //TODO: documentar
+        ServidorTesis servidor = TesisRetrofit.obtenerConexion();
+        Call<LoginRs> loginCall = servidor.login(new LoginRq(username, password));
 
-            Response<LoginRs> response = loginCall.execute();
+        loginCall.enqueue(new Callback<LoginRs>() {
+            public void onResponse(Call<LoginRs> call, Response<LoginRs> response) {
+                if(response.isSuccessful()){
+                    LoginRs bodyResponse = response.body();
+                    user = new UsuarioView(bodyResponse);
 
-            if(response.isSuccessful()){
-                LoginRs bodyResponse = response.body();
-                user = new UsuarioView(bodyResponse);
-
-                //Guarda token
-                {
-                    SharedPreferences preferences = context.getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
-                    preferences.edit().putString("token", bodyResponse.token).apply();
+                    //Guarda token
+                    {
+                        SharedPreferences preferences = context.getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+                        preferences.edit().putString("token", bodyResponse.token).apply();
+                    }
+                }else{
+                    resultMutableLiveData.postValue(new LoginResult(false, "Usuario y/o clave invalidos."));
                 }
-            }else{
-                return new Result.Error(new IOException("Usuario y/o clave incorrectas."));
             }
-        } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
+            public void onFailure(Call<LoginRs> call, Throwable t) {
+                resultMutableLiveData.postValue(new LoginResult(false, t.getMessage()));
+            }
+        });
+    }
+
+    public void validarToken(MutableLiveData<LoginResult> resultMutableLiveData){
+        String token = obtenerToken();
+
+        if(token != null && !token.isEmpty()){
+            ServidorTesis servidor = TesisRetrofit.obtenerConexion();
+            Call<UsuarioRs> call = servidor.validarToken(token);
+            call.enqueue(new Callback<UsuarioRs>() {
+                public void onResponse(Call<UsuarioRs> call, Response<UsuarioRs> response) {
+                    if(response.isSuccessful()){
+                        user = new UsuarioView(response.body());
+                        resultMutableLiveData.postValue(new LoginResult(true, "Login exitoso."));
+                    }else {
+                        logout();
+                        resultMutableLiveData.postValue(new LoginResult(false, "Login fallido."));
+                    }
+
+                }
+                public void onFailure(Call<UsuarioRs> call, Throwable t) {
+                    resultMutableLiveData.postValue(new LoginResult(false, "Error de conexion."));
+                }
+            });
         }
-        return new Result.Success<UsuarioView>(user);
+
+        //No token
+        resultMutableLiveData.postValue(new LoginResult(false, ""));
     }
 
     public UsuarioView getUser() {

@@ -19,7 +19,7 @@ public interface ServidorTesis {
     Call<LoginRs> login(@Body LoginRq loginRq);
 
     @GET("validate")
-    Call<Boolean> validarToken(@Query("token") String token);
+    Call<UsuarioRs> validarToken(@Query("token") String token);
 
     @GET("comercio")
     Call<ListaComerciosRs> obtenerComercios(@Query("token") String token,
